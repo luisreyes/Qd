@@ -1,0 +1,47 @@
+#app-header-panel{}
+#app-header-toolbar{ 
+	color: $app-header-color;
+	background-color: $app-header-background-color;
+
+	paper-icon-button{ 
+		color: $app-header-icon-color;
+		&.accent{ 
+			color: $app-header-icon-color-accent;
+		}
+	}
+}
+
+#addEdit-title-decorator{ 
+	font-size: xx-large;
+	padding: 0;
+
+	&::shadow .error-text{
+		font-size: initial;
+	}
+}
+
+.page-container{ padding: 0 15px; }
+
+paper-dropdown { color: $app-body-color; }
+
+paper-icon-button{
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-touch-callout: none;
+	&[icon='back']{}
+}
+
+paper-fab{
+	background-color:$accentColor;
+	position: absolute;
+	opacity: 0;
+	bottom: -60px;
+	left: -webkit-calc(100% - 86px);
+	-webkit-tap-highlight-color: rgba(0,0,0,0);
+	-webkit-touch-callout: none;
+	-webkit-transition: bottom 400ms, opacity 400ms;
+
+	&[available]{
+		bottom: 30px;
+		opacity: 1;
+	}
+}

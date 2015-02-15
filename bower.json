@@ -1,0 +1,11 @@
+{
+  "name": "qd",
+  "version": "0.0.0",
+  "dependencies": {
+    "polymer": "Polymer/polymer#~0.5.4",
+    "core-elements": "Polymer/core-elements#~0.5.4",
+    "paper-elements": "Polymer/paper-elements#~0.5.4",
+    "apollo.js": "~1.7.0",
+    "bootstrap-sweetalert": "~0.4.3"
+  }
+}

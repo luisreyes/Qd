@@ -1,0 +1,13 @@
+{
+	"version": 3,
+	"file": "styles.css",
+	"sources": [
+		"../../dev/styles/core.scss",
+		"../../dev/styles/_variables.scss",
+		"../../dev/styles/global.scss",
+		"../../dev/styles/app.scss"
+	],
+	"sourcesContent": [],
+	"mappings": "AEAA,MAAM;EAAO,QAAQ;;AAErB;EACC,aAAa;EACb,ODCoB;ECApB,kBDKsB;ECJtB,6BAA6B;;ACL9B;EACC,OFSkB;EERlB,kBFFoB;EEErB,oBAAoB;IAGlB,OFMsB;IENxB,oBAAoB,iBAAiB;MAElC,OFK4B;;AEA/B;EACC,WAAW;EACX,SAAS;EAAV,wBAAwB,SAAS;IAG/B,WAAW;;AAIb;EAAiB,SAAS;;AAE1B;EAAiB,OFnBI;;AEqBrB;EACC,6BAA6B;EAC7B,uBAAuB;;AAIxB;EACC,kBF7BoB;EE8BpB,UAAU;EACV,SAAS;EACT,QAAQ;EACR,MAAM;EACN,6BAA6B;EAC7B,uBAAuB;EACvB,oBAA2B;EAA5B,SAAS;IAGP,QAAQ;IACR,SAAS",
+	"names": []
+}

@@ -1,0 +1,34 @@
+{
+	"views":{
+		
+		"add":{
+			"title": {
+				"label": "Title", 
+				"error": "Give the message a title"
+			},
+			"phone": {
+				"label": "Phone Number", 
+				"error": "Enter a valid phone number"
+			},
+			"message": {
+				"label": "Message", 
+				"error": "You need a message to send"
+			}
+		},
+
+		"edit":{
+			"title": {
+				"label": "Title", 
+				"error": "Give the message a title"
+			},
+			"phone": {
+				"label": "Phone Number", 
+				"error": "Enter a valid phone number"
+			},
+			"message": {
+				"label": "Message", 
+				"error": "You need a message to send"
+			}
+		}
+	}
+}
