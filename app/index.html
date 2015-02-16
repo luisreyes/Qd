@@ -48,6 +48,7 @@
           </section>
           <section class="page-container">
             <section>
+              <input id="addEdit-guid-input" type="hidden">
               <paper-input-decorator id="addEdit-title-decorator" label="Title" error="Give the message a title">
                 <input id="addEdit-title-input" required is="core-input" type="text" on-input="{{input}}" on-blur="{{validate}}">
               </paper-input-decorator>
@@ -59,10 +60,28 @@
                   <textarea id="addEdit-message-input" required on-blur="{{validate}}" on-input="{{input}}"></textarea>
                 </paper-autogrow-textarea>
               </paper-input-decorator>
+              <paper-input-decorator id="addEdit-date-decorator" floatingLabel label="Date" error="You need a message to send">
+                <input id="addEdit-date-input" required is="core-input" type="date" on-input="{{input}}" on-blur="{{validate}}">
+              </paper-input-decorator>
+              <paper-input-decorator id="addEdit-time-decorator" floatingLabel label="Time" error="You need a message to send">
+                <input id="addEdit-time-input" required is="core-input" type="time" on-input="{{input}}" on-blur="{{validate}}">
+              </paper-input-decorator>
+              <div center horizontal layout>
+                <div flex>Active</div>
+                <paper-toggle-button checked></paper-toggle-button>
+              </div>
+              <paper-dropdown-menu label="Repeat" flex>
+                <paper-dropdown class="dropdown">
+                  <core-menu class="menu">
+                    <paper-item>option 1</paper-item>
+                  </core-menu>
+                </paper-dropdown>
+              </paper-dropdown-menu>
             </section>
           </section>
           <section class="page-container">
             <section>
+              <input id="addEdit-guid-input" type="hidden">
               <paper-input-decorator id="addEdit-title-decorator" label="Title" error="Give the message a title">
                 <input id="addEdit-title-input" required is="core-input" type="text" on-input="{{input}}" on-blur="{{validate}}">
               </paper-input-decorator>
@@ -74,6 +93,23 @@
                   <textarea id="addEdit-message-input" required on-blur="{{validate}}" on-input="{{input}}"></textarea>
                 </paper-autogrow-textarea>
               </paper-input-decorator>
+              <paper-input-decorator id="addEdit-date-decorator" floatingLabel label="Date" error="You need a message to send">
+                <input id="addEdit-date-input" required is="core-input" type="date" on-input="{{input}}" on-blur="{{validate}}">
+              </paper-input-decorator>
+              <paper-input-decorator id="addEdit-time-decorator" floatingLabel label="Time" error="You need a message to send">
+                <input id="addEdit-time-input" required is="core-input" type="time" on-input="{{input}}" on-blur="{{validate}}">
+              </paper-input-decorator>
+              <div center horizontal layout>
+                <div flex>Active</div>
+                <paper-toggle-button checked></paper-toggle-button>
+              </div>
+              <paper-dropdown-menu label="Repeat" flex>
+                <paper-dropdown class="dropdown">
+                  <core-menu class="menu">
+                    <paper-item>option 1</paper-item>
+                  </core-menu>
+                </paper-dropdown>
+              </paper-dropdown-menu>
             </section>
           </section>
           <section class="page-container">
@@ -97,8 +133,6 @@
     </template>
     <!-- build:js scripts/vendor.js-->
     <!-- bower:js-->
-    <script src="/bower_components/webcomponentsjs/webcomponents.js"></script>
-    <script src="/bower_components/polymer/polymer.js"></script>
     <script src="/bower_components/bootstrap-sweetalert/lib/sweet-alert.js"></script>
     <!-- endbower-->
     <!-- endbuild-->

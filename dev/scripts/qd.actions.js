@@ -104,7 +104,7 @@ qd.actions = (function(){
 				case 1:
 					model.isAdd = true;
 					if(!fields){ setFields(); }
-					resetValidations();
+					resetForNewEntry();
 					break;
 
 				case 2:
@@ -116,13 +116,24 @@ qd.actions = (function(){
 				default:
 					model.isAdd = false;
 					model.isEdit = false;
-					isDirty = false;
-					isTriedToSave = false;
 					break;
 			}
 
 		}
 
+	}
+
+	function resetForNewEntry(){
+		isDirty = false;
+		isTriedToSave = false;
+		resetValidations();
+		blurAllFields();
+		clearAllFields();
+		setNewGuid();
+	}
+
+	function setNewGuid(){
+		fields.guid.input.value = guid();
 	}
 
 	function confirmExit(from, to){
@@ -151,12 +162,12 @@ qd.actions = (function(){
 
 	function setFields(){
 		fields = {};
-		arrFields = ['title', 'phone', 'message'];
+		arrFields = ['guid', 'title', 'phone', 'message'];
 		
 		for(var i = 0; i <= arrFields.length; i++){
 			var currFieldTitle = arrFields[i];
 			fields[currFieldTitle] = {};
-			fields[currFieldTitle].decorator = document.querySelector('#addEdit-'+currFieldTitle+'-decorator');
+			if(currFieldTitle !== 'guid') { fields[currFieldTitle].decorator = document.querySelector('#addEdit-'+currFieldTitle+'-decorator'); }
 			fields[currFieldTitle].input = document.querySelector('#addEdit-'+currFieldTitle+'-input');
 		}
 	}
@@ -206,15 +217,15 @@ qd.actions = (function(){
 			save();
 		}
 
-
 	}
 
 
 
 	function save(){
-		console.log('SAVE ENTRY');
-		console.log(saveModel);
-		document.querySelector('#dashboardTA').value = JSON.stringify(saveModel);
+		
+		// Save to localStorage
+		localStorage.setItem( saveModel.guid, JSON.stringify( saveModel ) );
+		
 		isDirty = false;
 		setSelected(0);
 	}
@@ -226,19 +237,23 @@ qd.actions = (function(){
 		isValidAll = true;
 		
 		arrFields.forEach( function(e){
-			
-			// Validate each field
-			if(e !== 'phone'){
-				//Regular Item validation
-				fields[e].decorator.isInvalid = !fields[e].input.validity.valid;
-			}else{
-				// Special validation for phone
-				fields[e].decorator.isInvalid = !isValidNumber(fields[e].input.value, language);
-			}
+			if(e !== 'guid'){
 
-			// If any invalid field... set to false to avoid save
-			if(fields[e].decorator.isInvalid) { isValidAll = false; }
-			
+				console.log(e);
+				
+				// Validate each field
+				if(e !== 'phone'){
+					//Regular Item validation
+					fields[e].decorator.isInvalid = !fields[e].input.validity.valid;
+				}else{
+					// Special validation for phone
+					fields[e].decorator.isInvalid = !isValidNumber(fields[e].input.value, language);
+				}
+
+				
+				// If any invalid field... set to false to avoid save
+				if(fields[e].decorator.isInvalid) { isValidAll = false; }
+			}
 		});
 	}
 
@@ -260,7 +275,7 @@ qd.actions = (function(){
 	function clearAllFields(){
 		arrFields.forEach( function(e){
 			fields[e].input.value = '';
-			fields[e].decorator.updateLabelVisibility();
+			if(e !== 'guid') { fields[e].decorator.updateLabelVisibility(); }
 		});
 		
 		resetValidations();
@@ -268,7 +283,7 @@ qd.actions = (function(){
 
 	function resetValidations(){
 		arrFields.forEach( function(e){
-			fields[e].decorator.isInvalid = false;
+			if(e !== 'guid'){ fields[e].decorator.isInvalid = false; }
 		});
 	}
 
@@ -279,6 +294,15 @@ qd.actions = (function(){
 			
 			decorator.isInvalid = type === 'tel' ? !isValidNumber(input.value, language) : !input.validity.valid;
 		}
+	}
+
+	function guid() {
+		
+		function s4() {
+			return Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+		}
+
+		return s4() + s4();
 	}
 
 	return {

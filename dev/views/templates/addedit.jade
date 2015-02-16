@@ -1,10 +1,10 @@
 section
+	
+	input#addEdit-guid-input(type="hidden")
 
 	paper-input-decorator#addEdit-title-decorator(label="#{viewmodel.title.label}" error="#{viewmodel.title.error}")
 		input#addEdit-title-input(required is='core-input' type='text' on-input='{{input}}' on-blur='{{validate}}')
 
-	
-	//- core-icon.pull-left(icon="perm-phone-msg")
 	paper-input-decorator#addEdit-phone-decorator(floatingLabel label="#{viewmodel.phone.label}" error="#{viewmodel.phone.error}")
 		input#addEdit-phone-input(required is='core-input' type='tel' on-input='{{input}}' on-blur='{{validate}}')
 	
@@ -12,4 +12,17 @@ section
 		paper-autogrow-textarea#addEdit-message-autogrow(maxRows=6)
 			textarea#addEdit-message-input(required on-blur='{{validate}}' on-input='{{input}}')
 
-		
+	paper-input-decorator#addEdit-date-decorator(floatingLabel label="#{viewmodel.date.label}" error="#{viewmodel.date.error}")
+		input#addEdit-date-input(required is='core-input' type='date' on-input='{{input}}' on-blur='{{validate}}')
+
+	paper-input-decorator#addEdit-time-decorator(floatingLabel label="#{viewmodel.time.label}" error="#{viewmodel.time.error}")
+		input#addEdit-time-input(required is='core-input' type='time' on-input='{{input}}' on-blur='{{validate}}')
+
+	div(center horizontal layout)
+		div(flex) #{viewmodel.active.label}
+		paper-toggle-button(checked)
+
+	paper-dropdown-menu(label="#{viewmodel.repeat.label}" flex)
+		paper-dropdown.dropdown
+			core-menu.menu
+				paper-item option 1

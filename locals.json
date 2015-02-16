@@ -1,4 +1,13 @@
 {
+	"dialog":{
+		"confirm":{
+			"title":"tit",
+			"message":"msg",
+			"dismiss":"can",
+			"accert":"dis"
+		}
+	},
+
 	"views":{
 		
 		"add":{
@@ -13,7 +22,25 @@
 			"message": {
 				"label": "Message", 
 				"error": "You need a message to send"
+			},
+			"date": {
+				"label": "Date", 
+				"error": "You need a message to send"
+			},
+			"time": {
+				"label": "Time", 
+				"error": "You need a message to send"
+			},
+			"active": {
+				"label": "Active", 
+				"error": "You need a message to send"
+			},
+			"repeat": {
+				"label": "Repeat", 
+				"error": "You need a message to send",
+				"options":["None", "Daily", "Weekly", "Monthly"]
 			}
+
 		},
 
 		"edit":{
@@ -28,6 +55,23 @@
 			"message": {
 				"label": "Message", 
 				"error": "You need a message to send"
+			},
+			"date": {
+				"label": "Date", 
+				"error": "You need a message to send"
+			},
+			"time": {
+				"label": "Time", 
+				"error": "You need a message to send"
+			},
+			"active": {
+				"label": "Active", 
+				"error": "You need a message to send"
+			},
+			"repeat": {
+				"label": "Repeat", 
+				"error": "You need a message to send",
+				"options":["None", "Daily", "Weekly", "Monthly"]
 			}
 		}
 	}
