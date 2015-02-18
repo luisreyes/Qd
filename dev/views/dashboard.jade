@@ -1,3 +1,12 @@
 section
-	paper-input-decorator(label="Current Save")
-		textarea#dashboardTA
+	core-menu#dash-activelist(selectedClass="")
+		template(if='{{activelist.length == 0}}')
+			div You have no messages
+
+		template(repeat='{{entry in activelist}}')
+			paper-item.dash-activelist-item(view="2" on-tap='{{go}}' guid='{{entry.guid}}')
+				//-paper-icon-button.dash-activelist-item-icon-isactive(icon="{{entry.isactive ? 'alarm-on' : 'alarm-off'}}" on-tap="{{quickToggle}}")
+				div(flex)
+					div.dash-activelist-item-title {{entry.title}}
+					div.dash-activelist-item-phone {{entry.phone}}
+				//-paper-icon-button(icon="menu" view="2" on-tap='{{go}}' guid='{{entry.guid}}')

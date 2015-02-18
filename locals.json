@@ -12,33 +12,33 @@
 		
 		"add":{
 			"title": {
-				"label": "Title", 
-				"error": "Give the message a title"
+				"label": "Message Title", 
+				"error": ""
 			},
 			"phone": {
 				"label": "Phone Number", 
-				"error": "Enter a valid phone number"
+				"error": ""
 			},
 			"message": {
 				"label": "Message", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"date": {
 				"label": "Date", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"time": {
 				"label": "Time", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"active": {
 				"label": "Active", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"repeat": {
 				"label": "Repeat", 
-				"error": "You need a message to send",
-				"options":["None", "Daily", "Weekly", "Monthly"]
+				"error": "",
+				"options":["No Repeat", "Daily", "Weekly", "Monthly"]
 			}
 
 		},
@@ -46,32 +46,32 @@
 		"edit":{
 			"title": {
 				"label": "Title", 
-				"error": "Give the message a title"
+				"error": ""
 			},
 			"phone": {
 				"label": "Phone Number", 
-				"error": "Enter a valid phone number"
+				"error": ""
 			},
 			"message": {
 				"label": "Message", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"date": {
 				"label": "Date", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"time": {
 				"label": "Time", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"active": {
 				"label": "Active", 
-				"error": "You need a message to send"
+				"error": ""
 			},
 			"repeat": {
 				"label": "Repeat", 
-				"error": "You need a message to send",
-				"options":["None", "Daily", "Weekly", "Monthly"]
+				"error": "",
+				"options":["No Repeat", "Daily", "Weekly", "Monthly"]
 			}
 		}
 	}

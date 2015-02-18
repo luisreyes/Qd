@@ -1,5 +1,5 @@
 'use strict';
-/*! qd - v0.0.0 - 2015-02-15 */
+/*! qd - v0.0.0 - 2015-02-17 */
 // Source: dev/scripts/qd.js
 var qd = {};
 qd.core = (function() {
@@ -18,12 +18,20 @@ qd.core = (function() {
 qd.actions = (function(){
 	'use strict';
 
-	var model, buttons, language, saveModel,
+	var model,
+	buttons,
+	language,
+	saveModel,
+	toast,
+	fields,
+	currentGuid,
+	repeatCtrl,
+	repeatInput,
+	pageName,
 	isDirty = false,
 	isTriedToSave = false,
 	isValidAll = false,
-	fields,
-	arrFields = [],
+	fieldTypes = [],
 	colors = {
 		darkPrimaryColor: '#0288D1',
 		defaultPrimaryColor: '#03A9F4',
@@ -38,18 +46,14 @@ qd.actions = (function(){
 
 	function init(){
 		
+		updateEntryList();
 		setSelected(0);
 		setGlobalStyles();
-		setSaveModel();
 	}
 
 	function updateIsDirty(){
 		
-		var tempModel = {
-			title: fields.title.input.value,
-			phone: fields.phone.input.value,
-			message: fields.message.input.value
-		};
+		var tempModel = getValuesFromFields();
 
 		isDirty = (JSON.stringify(tempModel) !== JSON.stringify(saveModel));
 	}
@@ -63,13 +67,15 @@ qd.actions = (function(){
 		model.views = {};
 		model.isAdd = false;
 		model.isEdit = false;
+		//model.repeat = 'None';
+		model.toast = { message: 'Hello', type: 'info'};
 		model.views.titles = ['Dashboard', 'Create', 'Edit', 'Settings', 'About' ];
-
+		
 		init();
 
 		model.go = function(e,d,s){
 			var viewId = s.getAttribute('view');
-			setSelected(viewId);
+			setSelected(viewId, s);
 		};
 
 		model.back = function(){
@@ -83,8 +89,26 @@ qd.actions = (function(){
 			onSave();
 		};
 
+		model.delete = function(){
+			onDelete();
+		};
+
 		model.validate = function(e,d,s){
 			validate(s);
+		};
+
+		model.contacts = function(){
+			onGetContacts();
+		};
+
+		model.toggle = function(){
+			this.isActive = this.isActive ? false : true;
+			
+			if(!this.isActive){
+				callToast('Message will not be sent', 'warning');
+			}
+
+			updateIsDirty();
 		};
 
 		model.input = function(e,d,s){
@@ -100,16 +124,39 @@ qd.actions = (function(){
 			// Update isDirty Flag
 			updateIsDirty();
 		};
+
+		model.openRepeatDialog = function(){
+			model.repeat = fields[pageName].repeat.input.value.toLowerCase();
+			repeatDialog();
+		};
+
+		model.setrepeat = function(e,d,s){
+			var selectedValue = s.getAttribute('label');
+			fields[pageName].repeat.input.value = selectedValue;
+			fields[pageName].repeat.decorator.updateLabelVisibility(selectedValue);
+			repeatCtrl.close();
+			updateIsDirty();
+		};
 		
 	}
 
+	function updateEntryList(){
+		var list = [];
+			
+		for (var i = localStorage.length - 1; i >= 0; i--) {
+			var guid = localStorage.key(i);
+			list.push( JSON.parse( localStorage.getItem(guid) ) );
+		}
 
+		model.activelist = list;
 
-	function setSelected(index){
+	}
+
+	function setSelected(index, element){
 
 		if(isDirty){
 			
-			confirmExit(model.selected, parseInt(index));
+			confirmExit();
 
 		}else{
 
@@ -118,15 +165,19 @@ qd.actions = (function(){
 			switch(model.selected){
 
 				case 1:
-					model.isAdd = true;
 					if(!fields){ setFields(); }
+					pageName = 'add';
 					resetForNewEntry();
+					model.isAdd = true;
 					break;
 
 				case 2:
-					model.isEdit = true;
 					if(!fields){ setFields(); }
+					pageName = 'edit';
 					resetValidations();
+					currentGuid = element.getAttribute('guid');
+					setEditFIelds(currentGuid);
+					model.isEdit = true;
 					break;
 				
 				default:
@@ -139,37 +190,115 @@ qd.actions = (function(){
 
 	}
 
+	function setEditFIelds(guid){
+		var editModel = JSON.parse(localStorage.getItem(guid));
+		
+		fieldTypes.forEach( function(e){
+			fields[pageName][e].input.value = editModel[e];
+			
+			if(e !== 'guid') {
+				fields[pageName][e].decorator.updateLabelVisibility(editModel[e]);
+			}
+
+		});
+
+		model.isActive = editModel.isactive;
+
+	}
+
 	function resetForNewEntry(){
 		isDirty = false;
 		isTriedToSave = false;
+		model.isActive = true;
 		resetValidations();
 		blurAllFields();
 		clearAllFields();
 		setNewGuid();
+		resetDateTime();
+	}
+
+	function resetDateTime(){
+		fields[pageName].date.input.placeholder = 'Date';
+		fields[pageName].time.input.placeholder = 'Time';
 	}
 
 	function setNewGuid(){
-		fields.guid.input.value = guid();
+		fields[pageName].guid.input.value = guid();
 	}
 
-	function confirmExit(from, to){
+	function confirmExit(){
 
 		if(!buttons){bindButtons();}
 		
 		var dialog = document.querySelector('#addEdit-confirm-exit');
+		navigator.vibrate([50,50,50]);
 		dialog.open();
-		console.log('To: '+ to +' From: '+ from);
 
 	}
+
+	function confirmDelete(){
+
+		if(!buttons){bindButtons();}
+		
+		var dialog = document.querySelector('#addEdit-confirm-delete');
+		navigator.vibrate([50,50,50]);
+		dialog.open();
+
+	}
+
+	function repeatDialog(){
+		repeatCtrl = document.querySelector('#addEdit-select-repeat');
+		repeatInput = document.querySelector('#addEdit-select-input');
+		repeatCtrl.open();
+		//debugger;
+	}
+
+	function callToast(message, type){
+		if(!toast){ toast = document.querySelector('#app-toast'); }
+
+		model.toast.message = message;
+		model.toast.icon = getIconType(type);
+		model.toast.type = type;
+		
+
+		toast.show();
+	}
+
+	function getIconType(type){
+		var val;
+		switch(type){
+			case 'success':
+				val = 'check-circle';
+				break;
+			case 'info':
+				val = 'info';
+				break;
+			case 'warning':
+				val = 'warning';
+				break;
+			case 'error':
+				val = 'cancel';
+				break;
+			default:
+				val = '';
+				break;
+		}
+
+		return val;
+	}
+
 
 	function setSaveModel(model){
 		if(!model){
 
 			saveModel = {};
 			
-			arrFields.forEach( function(e){
+			fieldTypes.forEach( function(e){
 				saveModel[e] = '';
 			});
+
+			saveModel.isactive = true;
+			saveModel.repeat = 0;
 
 		}else{
 			saveModel = model;
@@ -177,14 +306,26 @@ qd.actions = (function(){
 	}
 
 	function setFields(){
-		fields = {};
-		arrFields = ['guid', 'title', 'phone', 'message'];
+		fields = { add:{}, edit:{} };
+		fieldTypes = ['guid', 'title', 'phone', 'message', 'date', 'time', 'repeat'];
 		
-		for(var i = 0; i <= arrFields.length; i++){
-			var currFieldTitle = arrFields[i];
-			fields[currFieldTitle] = {};
-			if(currFieldTitle !== 'guid') { fields[currFieldTitle].decorator = document.querySelector('#addEdit-'+currFieldTitle+'-decorator'); }
-			fields[currFieldTitle].input = document.querySelector('#addEdit-'+currFieldTitle+'-input');
+		var i = 0,
+		currFieldTitle = null;
+		
+		for(i; i < fieldTypes.length; i++){
+
+			currFieldTitle = fieldTypes[i];
+			
+			fields.add[currFieldTitle] = {};
+			fields.edit[currFieldTitle] = {};
+			
+			if(currFieldTitle !== 'guid') {
+				fields.add[currFieldTitle].decorator = document.querySelector('#add-'+currFieldTitle+'-decorator');
+				fields.edit[currFieldTitle].decorator = document.querySelector('#edit-'+currFieldTitle+'-decorator');
+			}
+			
+			fields.add[currFieldTitle].input = document.querySelector('#add-'+currFieldTitle+'-input');
+			fields.edit[currFieldTitle].input = document.querySelector('#edit-'+currFieldTitle+'-input');
 		}
 	}
 
@@ -192,7 +333,8 @@ qd.actions = (function(){
 		buttons = {
 			addEdit: {
 				cancel: document.querySelector('#addEdit-button-dialog-cancel'),
-				discard: document.querySelector('#addEdit-button-dialog-discard')
+				discard: document.querySelector('#addEdit-button-dialog-discard'),
+				delete: document.querySelector('#addEdit-button-dialog-delete')
 			}
 		};
 	}
@@ -213,12 +355,16 @@ qd.actions = (function(){
 			clearAllFields();
 		});
 
+		buttons.addEdit.delete.addEventListener('touchend', function(){
+			deleteEntry();
+		});
+
 
 	}
 
 	function setGlobalStyles(){
 		CoreStyle.g.paperInput.labelColor = colors.primaryTextColor;
-		CoreStyle.g.paperInput.focusedColor = colors.accentColor;
+		CoreStyle.g.paperInput.focusedColor = colors.darkPrimaryColor;
 		CoreStyle.g.paperInput.invalidColor = colors.error;
 	}
 
@@ -227,23 +373,49 @@ qd.actions = (function(){
 		validateAll();
 
 		if(isValidAll){
-			
 			setSaveModel(getValuesFromFields());
-
 			save();
+		}else{
+			navigator.vibrate([50,50,50]);
+			callToast('Required fields are not correct', 'error');
 		}
 
 	}
 
+
+	function onDelete(){
+		confirmDelete();
+
+	}
 
 
 	function save(){
 		
 		// Save to localStorage
 		localStorage.setItem( saveModel.guid, JSON.stringify( saveModel ) );
-		
+		updateEntryList();
 		isDirty = false;
 		setSelected(0);
+
+		setTimeout(function(){
+			callToast('Message Saved', 'success');
+		},250);
+	}
+
+	function deleteEntry(){
+		// Remove to localStorage
+		localStorage.removeItem( currentGuid );
+		updateEntryList();
+		isDirty = false;
+		blurAllFields();
+		clearAllFields();
+		setSelected(0);
+
+		setTimeout(function(){
+			callToast('Message Deleted', 'info');
+		},250);
+		
+		
 	}
 
 	function validateAll(){
@@ -251,55 +423,73 @@ qd.actions = (function(){
 		blurAllFields();
 
 		isValidAll = true;
-		
-		arrFields.forEach( function(e){
+		fieldTypes.forEach( function(e){
 			if(e !== 'guid'){
 
-				console.log(e);
-				
-				// Validate each field
-				if(e !== 'phone'){
-					//Regular Item validation
-					fields[e].decorator.isInvalid = !fields[e].input.validity.valid;
-				}else{
-					// Special validation for phone
-					fields[e].decorator.isInvalid = !isValidNumber(fields[e].input.value, language);
+				if(fields[pageName][e].input.hasAttribute('required')){
+					// Validate each field
+					if(e !== 'phone'){
+						//Regular Item validation
+						fields[pageName][e].decorator.isInvalid = !fields[pageName][e].input.validity.valid;
+					}else{
+						// Special validation for phone
+						fields[pageName][e].decorator.isInvalid = !isValidNumber(fields[pageName][e].input.value, language);
+					}
 				}
-
 				
 				// If any invalid field... set to false to avoid save
-				if(fields[e].decorator.isInvalid) { isValidAll = false; }
+				if(fields[pageName][e].decorator.isInvalid) { isValidAll = false; }
 			}
 		});
 	}
 
 	function getValuesFromFields(){
-		var model = {};
-		arrFields.forEach( function(e){
-			model[e] = fields[e].input.value;
+		var sm = {};
+
+		fieldTypes.forEach( function(e){
+			sm[e] = fields[pageName][e].input.value;
 		});
 
-		return model;
+		sm.isactive = model.isActive;
+		return sm;
+	}
+
+	function onGetContacts(){
+		
+		// Invoke Contacts from the phone
+		navigator.contacts.pickContact(function(contact){
+			
+			var pickedPhone = formatLocal(language, contact.phoneNumbers[0].value);
+			fields[pageName].phone.input.value = pickedPhone;
+			fields[pageName].phone.decorator.updateLabelVisibility();
+
+		},
+			function(err){
+				console.log('Error: ' + err);
+			}
+		);
 	}
 
 	function blurAllFields(){
-		arrFields.forEach( function(e){
-			fields[e].input.blur();
+		fieldTypes.forEach( function(e){
+			if(fields[pageName][e].input){
+				fields[pageName][e].input.blur();
+			}
 		});
 	}
 
 	function clearAllFields(){
-		arrFields.forEach( function(e){
-			fields[e].input.value = '';
-			if(e !== 'guid') { fields[e].decorator.updateLabelVisibility(); }
+		fieldTypes.forEach( function(e){
+			fields[pageName][e].input.value = '';
+			if(e !== 'guid') { fields[pageName][e].decorator.updateLabelVisibility(); }
 		});
 		
 		resetValidations();
 	}
 
 	function resetValidations(){
-		arrFields.forEach( function(e){
-			if(e !== 'guid'){ fields[e].decorator.isInvalid = false; }
+		fieldTypes.forEach( function(e){
+			if(e !== 'guid'){ fields[pageName][e].decorator.isInvalid = false; }
 		});
 	}
 

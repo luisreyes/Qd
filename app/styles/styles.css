@@ -3,9 +3,18 @@ body, html {
 
 body {
   font-family: 'RobotoDraft';
-  color: #212121;
+  color: #666666;
   background-color: #f0f0f0;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0.1); }
+
+.clear {
+  clear: both; }
+
+select, input[type="date"], input[type="time"] {
+  background: none;
+  border: none;
+  border-bottom: 1px solid #333;
+  padding: 7px; }
 
 #app-header-toolbar {
   color: #fff;
@@ -15,25 +24,83 @@ body {
     #app-header-toolbar paper-icon-button.accent {
       color: #fff; }
 
-#addEdit-title-decorator {
-  font-size: xx-large;
+#app-toast core-icon[type='success'] {
+  color: #8BC34A; }
+#app-toast core-icon[type='error'] {
+  color: #F44336; }
+#app-toast core-icon[type='warning'] {
+  color: #FFC107; }
+#app-toast core-icon[type='info'] {
+  color: #03A9F4; }
+#app-toast core-icon {
+  top: -2px; }
+
+#add-title-decorator, #edit-title-decorator {
+  font-size: x-large;
   padding: 0; }
-  #addEdit-title-decorator::shadow .error-text {
+  #add-title-decorator::shadow .error-text, #edit-title-decorator::shadow .error-text {
     font-size: initial; }
+
+#add-title-input, #edit-title-input {
+  margin: 40px 10px 10px; }
+
+#add-date-decorator, #edit-date-decorator {
+  width: 48%;
+  float: left; }
+
+#add-time-decorator, #edit-time-decorator {
+  width: 48%;
+  float: right; }
+
+#add-phone-icon, #edit-phone-icon {
+  position: absolute;
+  left: -webkit-calc(100% - 50px);
+  margin-top: 8px; }
+  #add-phone-icon::shadow #icon, #edit-phone-icon::shadow #icon {
+    width: 30px;
+    height: 30px;
+    color: #727272; }
+
+#add-active-wrapper, #edit-active-wrapper {
+  padding: 20px 0; }
+
+#add-repeat-input, #edit-repeat-input {
+  width: 100%; }
+
+.dash-activelist-item .dash-activelist-item-title {
+  font-size: x-large; }
+.dash-activelist-item .dash-activelist-item-phone {
+  font-size: small; }
+.dash-activelist-item .dash-activelist-item-icon-isactive {
+  margin-right: 20px; }
 
 .page-container {
   padding: 0 15px; }
+  .page-container.dashboard-container, .page-container.addEdit-container {
+    padding: 0; }
+
+core-overlay-layer ::shadow paper-action-dialog paper-button {
+  color: #03A9F4; }
+
+core-overlay-layer ::shadow paper-dialog paper-radio-button {
+  width: 100%; }
+
+paper-dropdown-menu {
+  border: none; }
 
 paper-dropdown {
-  color: #212121; }
+  color: #666666;
+  /*width:100%;*/ }
 
 paper-icon-button {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   -webkit-touch-callout: none; }
+  paper-icon-button[off] {
+    opacity: 0.5; }
 
 paper-fab {
   background-color: #FFC107;
-  position: absolute;
+  position: fixed;
   opacity: 0;
   bottom: -60px;
   left: -webkit-calc(100% - 86px);

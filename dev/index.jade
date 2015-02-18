@@ -8,7 +8,7 @@ html
 		script(src='/bower_components/webcomponentsjs/webcomponents.js')
 		link(rel="import" href="/bower_components/paper-elements/paper-elements.html")
 		link(rel="import" href="/bower_components/core-elements/core-elements.html")
-		//link(rel="import" href="/bower_components/core-animated-pages/transitions/slide-from-right.html")
+		link(rel="import" href="/bower_components/core-animated-pages/transitions/slide-from-right.html")
 		link(rel="import" href="/bower_components/core-animation/core-animation.html")
 		link(rel="import" href="/bower_components/paper-input/paper-autogrow-textarea.html")
 
@@ -39,8 +39,9 @@ html
 					span(flex)
 
 					//- Delete and Save Button (visible only on "AddEdit")
-					paper-icon-button.accent(icon="delete" hidden?="{{!isEdit}}")
-					paper-icon-button.accent(icon="check" hidden?="{{!isAdd && !isEdit}}" on-tap="{{save}}")
+					paper-icon-button.accent(icon="delete" hidden?="{{!isEdit}}" on-tap='{{delete}}')
+					paper-icon-button.accent(icon="check" hidden?="{{!isAdd && !isEdit}}" on-tap="{{save}}" )
+					paper-icon-button.accent(icon="{{isActive ? 'alarm-on' : 'alarm-off'}}" off?='{{!isActive}}' hidden?="{{!isAdd && !isEdit}}" on-tap="{{toggle}}")
 
 					//- Back Button (visible on every page except "AddEdit")
 					paper-menu-button(hidden?="{{selected != 0}}")
@@ -49,29 +50,43 @@ html
 							div.menu
 								paper-item(noink recenteringTouch view="3" on-tap="{{go}}") Settings
 								paper-item(noink recenteringTouch view="4" on-tap="{{go}}") About
-								paper-item(noink recenteringTouch view="2" on-tap="{{go}}") Edit
 					
 					
 
-				core-animated-pages(id="app-views" selected="{{selected}}" transitions="cross-fade-all")
-					section.page-container
+				core-animated-pages(id="app-views" selected="{{selected}}" transitions="slide-from-right")
+					section.page-container.dashboard-container
 						include views/dashboard
-					section.page-container
+					section.page-container.addEdit-container
 						include views/add
-					section.page-container
+					section.page-container.addEdit-container
 						include views/edit
 					section.page-container
 						include views/settings
 					section.page-container
 						include views/about
 				
-			paper-action-dialog#addEdit-confirm-exit(heading="Hey you have not saved!" transition="core-transition-center" autoCloseDisabled)
-				p All your changes will be lost.<br/>What do you want to do?
-				paper-button#addEdit-button-dialog-cancel(dismissive) Cancel
+			paper-action-dialog#addEdit-confirm-exit(backdrop="true" transition="core-transition-center" autoCloseDisabled)
+				p Discard unsaved changes?
+				paper-button#addEdit-button-dialog-cancel(affirmative) Cancel
 				paper-button#addEdit-button-dialog-discard(affirmative) Discard
+
+			paper-action-dialog#addEdit-confirm-delete(backdrop="true" transition="core-transition-center" autoCloseDisabled)
+				p Delete this message?
+				paper-button#addEdit-button-dialog-cancel(affirmative) Cancel
+				paper-button#addEdit-button-dialog-delete(affirmative) Delete
+
+			paper-dialog#addEdit-select-repeat(backdrop="true" transition="core-transition-center" heading="Repeat")
+				paper-radio-group#addEdit-select-input(selected='{{repeat}}')
+					paper-radio-button(on-tap='{{setrepeat}}' name="none" label="None")
+					paper-radio-button(on-tap='{{setrepeat}}' name="daily" label="Daily")
+					paper-radio-button(on-tap='{{setrepeat}}' name="weekly" label="Weekly")
+					paper-radio-button(on-tap='{{setrepeat}}' name="monthly" label="Monthly")
+
 
 			paper-fab(icon="add" view="1" on-tap="{{go}}" available?="{{selected == 0 }}")
 
+			paper-toast#app-toast(swipeDisabled duration='10000' text='{{toast.message}}') 
+				core-icon(icon='{{toast.icon}}' type='{{toast.type}}')
 			
 	
 
@@ -85,6 +100,7 @@ html
 		script(src='/bower_components/apollo.js/dist/apollo.min.js')
 		script(src='/scripts/app.js')
 		script(src='/scripts/lib/phonenumber.js')
+		//script(src='/scripts/lib/datePickerPlugin.js')
 
 		script.
 			window.addEventListener('polymer-ready', function(){

@@ -6,8 +6,6 @@
   	"default_locale": "en",
   	"permissions": [
   		"alarms",
-  		"app.gcm",
-  		"app.i18n",
   		"notifications",
   		"storage"
   	],

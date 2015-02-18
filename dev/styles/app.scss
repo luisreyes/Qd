@@ -11,28 +11,115 @@
 	}
 }
 
-#addEdit-title-decorator{ 
-	font-size: xx-large;
+#app-toast{
+	core-icon[type='success']{ color: $app-success; }
+	core-icon[type='error']{ color: $app-error; }
+	core-icon[type='warning']{ color: $app-warning; }
+	core-icon[type='info']{ color: $app-info; }
+	core-icon{top: -2px;}
+}
+
+#add-title-decorator,
+#edit-title-decorator{ 
+
+	font-size: x-large;
 	padding: 0;
 
 	&::shadow .error-text{
 		font-size: initial;
 	}
+
+	&::shadow .input-body{ 
+		//background-color: ;
+		//color: #EBEBEB;
+	}
 }
 
-.page-container{ padding: 0 15px; }
+paper-input-decorator{
+	&::shadow .underline .unfocused-underline{ 
+		// background-color: $secondaryTextColor;
+	}
+}
 
-paper-dropdown { color: $app-body-color; }
+#add-title-input,
+#edit-title-input
+{ margin: 40px 10px 10px; }
+
+#add-date-decorator,
+#edit-date-decorator{
+	width: 48%;
+	float:left;
+}
+
+
+#add-time-decorator,
+#edit-time-decorator{
+	width: 48%;
+	float:right;
+}
+
+#add-phone-icon,
+#edit-phone-icon{ 
+	position: absolute;
+	left: -webkit-calc(100% - 50px);
+	margin-top: 8px;
+
+	&::shadow #icon {
+		width: 30px;
+		height: 30px;
+		color: $secondaryTextColor;
+	}
+}
+
+#add-active-wrapper, 
+#edit-active-wrapper{ 
+	padding: 20px 0;
+}
+
+#add-repeat-input,
+#edit-repeat-input{
+	width: 100%;
+}
+
+.dash-activelist-item{
+	.dash-activelist-item-title{ font-size: x-large; }
+	.dash-activelist-item-phone{ font-size: small; }
+	.dash-activelist-item-icon-isactive{ margin-right:20px; }
+}
+
+
+.page-container{ 
+	padding: 0 15px;
+
+	&.dashboard-container,
+	&.addEdit-container{ 
+		padding:0;
+	}
+
+
+}
+
+core-overlay-layer ::shadow paper-action-dialog{
+	paper-button{ color: $primaryColor; }
+}
+
+core-overlay-layer ::shadow paper-dialog{
+	paper-radio-button{ width: 100%; }
+}
+
+paper-dropdown-menu { border: none; }
+paper-dropdown { color: $app-body-color; /*width:100%;*/ }
 
 paper-icon-button{
 	-webkit-tap-highlight-color: rgba(0,0,0,0);
 	-webkit-touch-callout: none;
 	&[icon='back']{}
+	&[off]{ opacity: 0.5; }
 }
 
 paper-fab{
 	background-color:$accentColor;
-	position: absolute;
+	position: fixed;
 	opacity: 0;
 	bottom: -60px;
 	left: -webkit-calc(100% - 86px);

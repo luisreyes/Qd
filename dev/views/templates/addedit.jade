@@ -1,28 +1,30 @@
 section
 	
-	input#addEdit-guid-input(type="hidden")
+	input(id="#{viewname}-guid-input" type="hidden")
 
-	paper-input-decorator#addEdit-title-decorator(label="#{viewmodel.title.label}" error="#{viewmodel.title.error}")
-		input#addEdit-title-input(required is='core-input' type='text' on-input='{{input}}' on-blur='{{validate}}')
-
-	paper-input-decorator#addEdit-phone-decorator(floatingLabel label="#{viewmodel.phone.label}" error="#{viewmodel.phone.error}")
-		input#addEdit-phone-input(required is='core-input' type='tel' on-input='{{input}}' on-blur='{{validate}}')
+	paper-input-decorator(id="#{viewname}-title-decorator" label="#{viewmodel.title.label}" error="#{viewmodel.title.error}")
+		input(id="#{viewname}-title-input" required is='core-input' type='text' on-input='{{input}}' on-blur='{{validate}}')
 	
-	paper-input-decorator#addEdit-message-decorator(floatingLabel label="#{viewmodel.message.label}" error="#{viewmodel.message.error}")
-		paper-autogrow-textarea#addEdit-message-autogrow(maxRows=6)
-			textarea#addEdit-message-input(required on-blur='{{validate}}' on-input='{{input}}')
+	section.page-container
+		
+		section(horizontal layout)
+			paper-input-decorator(id="#{viewname}-phone-decorator" floatingLabel flex label="#{viewmodel.phone.label}" error="#{viewmodel.phone.error}")
+				input(id="#{viewname}-phone-input" required is='core-input' type='tel' on-input='{{input}}' on-blur='{{validate}}')
+			paper-icon-button(id="#{viewname}-phone-icon" self-center icon="perm-contact-cal" on-touchend='{{contacts}}')
+		
 
-	paper-input-decorator#addEdit-date-decorator(floatingLabel label="#{viewmodel.date.label}" error="#{viewmodel.date.error}")
-		input#addEdit-date-input(required is='core-input' type='date' on-input='{{input}}' on-blur='{{validate}}')
 
-	paper-input-decorator#addEdit-time-decorator(floatingLabel label="#{viewmodel.time.label}" error="#{viewmodel.time.error}")
-		input#addEdit-time-input(required is='core-input' type='time' on-input='{{input}}' on-blur='{{validate}}')
+		paper-input-decorator(id="#{viewname}-message-decorator" floatingLabel label="#{viewmodel.message.label}" error="#{viewmodel.message.error}")
+			paper-autogrow-textarea(id="#{viewname}-message-autogrow" maxRows=6)
+				textarea(id="#{viewname}-message-input" required on-blur='{{validate}}' on-input='{{input}}')
+		
+		paper-input-decorator(id="#{viewname}-date-decorator" floatingLabel labelVisible="false" label="#{viewmodel.date.label}" error="#{viewmodel.date.error}")
+			input(id="#{viewname}-date-input" required is='core-input' type='date' on-input='{{input}}' on-blur='{{validate}}' value="")
 
-	div(center horizontal layout)
-		div(flex) #{viewmodel.active.label}
-		paper-toggle-button(checked)
+		paper-input-decorator(id="#{viewname}-time-decorator" floatingLabel labelVisible="false" label="#{viewmodel.time.label}" error="#{viewmodel.time.error}")
+			input(id="#{viewname}-time-input" required is='core-input' type='time' on-input='{{input}}' on-blur='{{validate}}')
 
-	paper-dropdown-menu(label="#{viewmodel.repeat.label}" flex)
-		paper-dropdown.dropdown
-			core-menu.menu
-				paper-item option 1
+		div.clear
+
+		paper-input-decorator(id="#{viewname}-repeat-decorator" floatingLabel label="#{viewmodel.repeat.label}" error="#{viewmodel.repeat.error}")
+			input(id="#{viewname}-repeat-input" on-tap='{{openRepeatDialog}}' disabled)
